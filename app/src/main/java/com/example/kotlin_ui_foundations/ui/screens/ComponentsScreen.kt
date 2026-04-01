@@ -8,47 +8,56 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.kotlin_ui_foundations.ui.components.FoundationButton
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.kotlin_ui_foundations.ui.components.FoundationCard
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import com.example.kotlin_ui_foundations.data.local.UIComponentEntity
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ComponentsScreen() {
+fun ComponentsScreen(
+    viewModel: ComponentsViewModel = hiltViewModel()
+) {
+
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("UI Foundations", style = MaterialTheme.typography.titleLarge) },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            )
-        },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /* Acción */ }) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar")
+            FloatingActionButton(onClick = {
+                viewModel.addComponent("Nuevo", "Creado desde la UI")
+            }) {
+                Icon(Icons.Default.Add, contentDescription = null)
             }
         }
     ) { paddingValues ->
-        MainContent(modifier = Modifier.padding(paddingValues))
+        if (state.isLoading) {
+            CircularProgressIndicator()
+        } else {
+            MainContent(
+                components = state.components, // Room list
+                modifier = Modifier.padding(paddingValues)
+            )
+        }
     }
 }
 
 @Composable
-fun MainContent(modifier: Modifier = Modifier) {
-    val itemsList = listOf("Componente A", "Componente B", "Componente C", "Componente D")
-
+fun MainContent(
+    components: List<UIComponentEntity>,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
@@ -62,14 +71,15 @@ fun MainContent(modifier: Modifier = Modifier) {
             )
         }
 
-        items(itemsList) { itemTitle ->
-            FoundationCard(title = itemTitle) {
-                Text("Descripción detallada del $itemTitle usando nuestra tipografía moderna.")
-                FoundationButton(
-                    text = "Ver Detalle",
-                    onClick = { /* Navegación */ },
-                    modifier = Modifier.padding(top = 8.dp)
+        items(components) { entity ->
+            FoundationCard(title = entity.name) {
+                Text(
+                    text = entity.description,
+                    style = MaterialTheme.typography.bodyLarge
                 )
+                if (entity.isFavorite) {
+                    Icon(Icons.Default.Favorite, contentDescription = null, tint = Color.Red)
+                }
             }
         }
     }
