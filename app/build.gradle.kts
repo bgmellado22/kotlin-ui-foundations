@@ -69,5 +69,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    constraints {
+        implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
+    }
     ksp(libs.hilt.compiler)
 }
