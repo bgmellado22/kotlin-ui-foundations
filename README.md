@@ -25,7 +25,7 @@ This project strictly adheres to **Modern Android Development (MAD)** guidelines
 * **Testing:** JUnit, MockK (Mocking), and Turbine (Flow testing)
 
 ## ©️ License & Copyright
-The source code in this repository is licensed under the MIT License.
+The source code in this repository is licensed under the Apache 2.0 License.
 Note: The artwork and illustrations displayed within the application are the exclusive property of Bastihan and are not covered by the open-source license. All rights reserved.
 
 ## 📂 Project Structure
