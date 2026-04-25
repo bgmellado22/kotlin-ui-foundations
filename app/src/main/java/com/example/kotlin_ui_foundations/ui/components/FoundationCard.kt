@@ -20,9 +20,12 @@ import com.example.kotlin_ui_foundations.ui.theme.KotlinuifoundationsTheme
 fun FoundationCard(
     modifier: Modifier = Modifier,
     title: String? = null,
+    onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     Card(
+        onClick = onClick ?: {},
+        enabled = onClick != null,
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(

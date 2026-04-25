@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlin_ui_foundations.data.local.ComponentDao
 import com.example.kotlin_ui_foundations.data.local.UIComponentEntity
+import com.example.kotlin_ui_foundations.ui.common.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,9 +19,8 @@ class ComponentsViewModel @Inject constructor(
     private val dao: ComponentDao
 ) : ViewModel() {
 
-    // mutable state and public
-    private val _uiState = MutableStateFlow(ComponentsUiState(isLoading = true))
-    val uiState: StateFlow<ComponentsUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState<List<UIComponentEntity>>>(UiState.Loading)
+    val uiState: StateFlow<UiState<List<UIComponentEntity>>> = _uiState.asStateFlow()
 
     init {
         observeComponents()
@@ -29,17 +29,22 @@ class ComponentsViewModel @Inject constructor(
     private fun observeComponents() {
         viewModelScope.launch {
             dao.getAllComponents()
-                .catch { e -> _uiState.update { it.copy(errorMessage = e.message, isLoading = false) } }
+                .catch { e -> 
+                    _uiState.value = UiState.Error(e.message ?: "Unknown Error")
+                }
                 .collect { list ->
-                    _uiState.update { it.copy(components = list, isLoading = false) }
+                    _uiState.value = UiState.Success(list)
                 }
         }
     }
 
-    // add a new component
     fun addComponent(name: String, description: String) {
         viewModelScope.launch {
-            dao.insertComponent(UIComponentEntity(name = name, description = description))
+            try {
+                dao.insertComponent(UIComponentEntity(name = name, description = description))
+            } catch (e: Exception) {
+                // In a real app, you might want to handle this via a side effect or a specific UI state for addition
+            }
         }
     }
 }

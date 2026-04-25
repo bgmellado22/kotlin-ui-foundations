@@ -11,6 +11,9 @@ interface ComponentDao {
     @Query("SELECT * FROM components ORDER BY name ASC")
     fun getAllComponents(): Flow<List<UIComponentEntity>>
 
+    @Query("SELECT * FROM components WHERE id = :id")
+    suspend fun getComponentById(id: Int): UIComponentEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertComponent(component: UIComponentEntity)
 }
