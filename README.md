@@ -24,7 +24,7 @@ This project strictly adheres to **Modern Android Development (MAD)** guidelines
 * **Asynchrony:** Kotlin Coroutines & Flow / StateFlow
 * **Testing:** JUnit, MockK (Mocking), and Turbine (Flow testing)
 
-License & Copyright
+## License & Copyright
 The source code in this repository is licensed under the MIT License.
 Note: The artwork and illustrations displayed within the application are the exclusive property of Bastihan and are not covered by the open-source license. All rights reserved.
 
