@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -20,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,9 +36,9 @@ fun ComponentsScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                viewModel.addComponent("Nuevo", "Creado desde la UI")
+                viewModel.addNextDrawing()
             }) {
-                Icon(Icons.Default.Add, contentDescription = "Add Component")
+                Icon(Icons.Default.Add, contentDescription = "Añadir Dibujo")
             }
         }
     ) { paddingValues ->
@@ -52,7 +50,10 @@ fun ComponentsScreen(
                 is UiState.Success -> {
                     MainContent(
                         components = state.data,
-                        onItemClick = { onNavigateToDetail(it.id) }
+                        onItemClick = { onNavigateToDetail(it.id) },
+                        onFavoriteClick = { componenteClickeado ->
+                            viewModel.toggleFavorite(componenteClickeado)
+                        }
                     )
                 }
                 is UiState.Error -> {
@@ -71,6 +72,7 @@ fun ComponentsScreen(
 fun MainContent(
     components: List<UIComponentEntity>,
     onItemClick: (UIComponentEntity) -> Unit,
+    onFavoriteClick: (UIComponentEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -80,25 +82,27 @@ fun MainContent(
     ) {
         item {
             Text(
-                text = "Catálogo de Cimientos",
+                text = "Galería de Dibujos",
                 style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = "Añade nuevos dibujos a la galería y espera a que se revelen.",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(bottom = 16.dp)
             )
         }
 
         items(components, key = { it.id }) { entity ->
+            // FoundationCard con Coil
             FoundationCard(
                 title = entity.name,
-                onClick = { onItemClick(entity) }
-            ) {
-                Text(
-                    text = entity.description,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                if (entity.isFavorite) {
-                    Icon(Icons.Default.Favorite, contentDescription = null, tint = Color.Red)
-                }
-            }
+                description = entity.description,
+                imageUrl = entity.imageUrl,
+                isFavorite = entity.isFavorite,
+                onClick = { onItemClick(entity) },
+                onFavoriteClick = { onFavoriteClick(entity) }
+            )
         }
     }
 }

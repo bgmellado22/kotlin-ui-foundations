@@ -22,6 +22,33 @@ class ComponentsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState<List<UIComponentEntity>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<UIComponentEntity>>> = _uiState.asStateFlow()
 
+    // Lista limitada de dibujos
+    private val miPortafolio = listOf(
+        UIComponentEntity(
+        name = "Gaara, Sasuke y Naruto",
+        description = "Dibujo digital de los tres protagonistas del arco de los exámenes chunnin.",
+        imageUrl = "https://drive.google.com/uc?id=1KRW4vlVaEqrGtpd9htPNePIU6duqpxty"
+        ),
+        UIComponentEntity(
+            name = "Nate y Ashley en el Spiderverso",
+            description = "Dibujo digital de los protagonistas del manga 'Lost Souls', adaptados a Spiderman",
+            imageUrl = "https://drive.google.com/uc?id=1BDiZFYh7B1X1J4eesHsvy81cLeXO4UJc"
+        ),
+        UIComponentEntity(
+            name = "Tiranosaurio Rex",
+            description = "Entintado digital de perfil del T-Rex, rey de los terópodos.",
+            imageUrl = "https://drive.google.com/uc?id=187tTSVMBIccGXPCCzVTCTUJasnapKVrH"
+        ),
+        UIComponentEntity(
+            name = "Ya está roto...",
+            description = "Entintado digital de la memorable escena entre Grace y Tommy, de la serie Peaky Blinders.",
+            imageUrl = "https://drive.google.com/uc?id=1GQ-ZIgvcYSS8fyibKJEq48zylNGXyxG0"
+        )
+    )
+
+    // Contador para saber cuál dibujo toca añadir
+    private var indiceActual = 0
+
     init {
         observeComponents()
     }
@@ -38,13 +65,24 @@ class ComponentsViewModel @Inject constructor(
         }
     }
 
-    fun addComponent(name: String, description: String) {
-        viewModelScope.launch {
-            try {
-                dao.insertComponent(UIComponentEntity(name = name, description = description))
-            } catch (e: Exception) {
-                // In a real app, you might want to handle this via a side effect or a specific UI state for addition
+    fun addNextDrawing() {
+        if (indiceActual < miPortafolio.size) {
+            viewModelScope.launch {
+                try {
+                    val dibujoAgregar = miPortafolio[indiceActual]
+                    dao.insertComponent(dibujoAgregar)
+                    indiceActual++
+                } catch (e: Exception) {
+                    _uiState.update { UiState.Error(e.message ?: "Unknown Error") }
+                }
             }
+        }
+    }
+
+    fun toggleFavorite(component: UIComponentEntity) {
+        viewModelScope.launch {
+            val updatedDrawing = component.copy(isFavorite = !component.isFavorite)
+            dao.updateComponent(updatedDrawing)
         }
     }
 }
