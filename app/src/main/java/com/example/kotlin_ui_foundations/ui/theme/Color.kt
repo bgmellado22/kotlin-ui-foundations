@@ -2,8 +2,9 @@ package com.example.kotlin_ui_foundations.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val DeepOcean = Color(0xFF0A1931)    // Primary
-val SlateBlue = Color(0xFF1A3D63)    // Secondary
-val SteelBlue = Color(0xFF4A7FA7)    // Tertiary
-val SkyBlue = Color(0xFFB3CFE5)      // Container / Edges
-val IceWhite = Color(0xFFF6FAFD)     // Surface / Background
+// Paleta semántica del Sistema de Gestión de Seguridad (SGS) El Tabo
+val PrimaryInstitutional = Color(0xFF1E3A8A) // Azul institucional para componentes primarios
+val SecondaryEmergency = Color(0xFFDC2626)    // Rojo de emergencia crítica para botón SOS y alertas
+val TertiaryOperational = Color(0xFF059669)   // Verde operativo para confirmaciones y estado GPS
+val NeutralDark = Color(0xFF0F172A)            // Tonalidad oscura para textos de alto contraste
+val SurfaceBackground = Color(0xFFF8FAFC)      // Fondo neutro claro para vistas administrativas

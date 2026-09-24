@@ -38,14 +38,20 @@ class ComponentsViewModelTest {
 
     @Test
     fun `when viewmodel starts, it should emit Loading then Success`() = runTest {
-        val components = listOf(UIComponentEntity(id = 1, name = "Test", description = "Desc"))
+        val components = listOf(
+            UIComponentEntity(
+                id = 1,
+                name = "Test",
+                description = "Desc",
+                imageUrl = "https://example.com/image.png",
+            ),
+        )
         every { dao.getAllComponents() } returns flowOf(components)
 
         viewModel = ComponentsViewModel(dao)
 
         viewModel.uiState.test {
             // Initial state should be Loading (or the first emission from the flow if it happens immediately)
-            // Due to how it's implemented in ViewModel (init block), it might jump to Success fast.
             val state = awaitItem()
             if (state is UiState.Loading) {
                 val nextState = awaitItem()

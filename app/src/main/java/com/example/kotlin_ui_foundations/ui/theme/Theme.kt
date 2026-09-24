@@ -1,6 +1,5 @@
 package com.example.kotlin_ui_foundations.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -13,31 +12,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = SkyBlue,
-    onPrimary = DeepOcean,
-    secondary = SteelBlue,
-    background = DeepOcean,
-    surface = SlateBlue,
-    onSurface = IceWhite
+    primary = PrimaryInstitutional,
+    onPrimary = Color.White,
+    secondary = SecondaryEmergency,
+    tertiary = TertiaryOperational,
+    background = NeutralDark,
+    surface = NeutralDark,
+    onSurface = Color.White,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = DeepOcean,
+    primary = PrimaryInstitutional,
     onPrimary = Color.White,
-    secondary = SlateBlue,
-    tertiary = SteelBlue,
-    background = IceWhite,
+    secondary = SecondaryEmergency,
+    tertiary = TertiaryOperational,
+    background = SurfaceBackground,
     surface = Color.White,
-    onSurface = DeepOcean,
-    surfaceVariant = SkyBlue
+    onSurface = NeutralDark,
 )
 
 @Composable
 fun KotlinuifoundationsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    dynamicColor: Boolean = false,
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -53,6 +51,6 @@ fun KotlinuifoundationsTheme(
         colorScheme = colorScheme,
         typography = Typography,
         shapes = Shapes,
-        content = content
+        content = content,
     )
 }
