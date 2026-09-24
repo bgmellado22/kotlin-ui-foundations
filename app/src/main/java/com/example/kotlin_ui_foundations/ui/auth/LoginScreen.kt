@@ -126,7 +126,7 @@ fun LoginScreen(
                             ),
                         )
                         Text(
-                            text = "Ciudadano (ROLE_CIUDADANO)",
+                            text = "Ciudadano (CIUDADANO)",
                             modifier = Modifier.padding(start = 12.dp),
                             style = MaterialTheme.typography.bodyMedium,
                         )
@@ -151,7 +151,7 @@ fun LoginScreen(
                             ),
                         )
                         Text(
-                            text = "Inspector / Patrulla (ROLE_INSPECTOR)",
+                            text = "Inspector / Patrulla (INSPECTOR)",
                             modifier = Modifier.padding(start = 12.dp),
                             style = MaterialTheme.typography.bodyMedium,
                         )

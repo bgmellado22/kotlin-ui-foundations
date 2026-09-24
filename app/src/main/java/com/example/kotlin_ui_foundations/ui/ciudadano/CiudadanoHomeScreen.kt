@@ -73,7 +73,7 @@ fun CiudadanoHomeScreen(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Rol Activo: ROLE_CIUDADANO",
+                            text = "Rol Activo: CIUDADANO",
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Medium,
                                 color = MaterialTheme.colorScheme.onSurface,

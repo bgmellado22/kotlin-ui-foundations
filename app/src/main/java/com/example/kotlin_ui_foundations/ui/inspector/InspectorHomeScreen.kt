@@ -73,7 +73,7 @@ fun InspectorHomeScreen(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Rol Activo: ROLE_INSPECTOR",
+                            text = "Rol Activo: INSPECTOR",
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Medium,
                                 color = MaterialTheme.colorScheme.onSurface,
