@@ -1,3 +1,16 @@
+import java.util.Properties
+
+// Carga de variables de entorno desde local.properties para evitar exponer credenciales y endpoints en el repositorio
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { load(it) }
+    }
+}
+
+val baseUrlApi: String = localProperties.getProperty("BASE_URL_API") ?: "https://sgs-backend-lcof.onrender.com/api/v1/"
+val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,6 +32,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Inyección de variables de entorno en BuildConfig y Manifest Placeholders
+        buildConfigField("String", "BASE_URL_API", "\"$baseUrlApi\"")
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     buildTypes {
@@ -39,6 +57,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
